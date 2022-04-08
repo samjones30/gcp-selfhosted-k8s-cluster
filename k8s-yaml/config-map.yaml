@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: example-config-map
+data:
+  name: Hello, world!
+  multiKey: |
+    Lots
+    and lots
+    of line

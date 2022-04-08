@@ -49,7 +49,12 @@ resource "google_compute_firewall" "compute_internal_firewall" {
 
   allow {
     protocol = "tcp"
-    ports    = ["6443"]
+    ports    = ["6443", "2379-2380", "10250", "10259", "10257", "30000-32767", "443", "4443"]
+  }
+
+  allow {
+    protocol = "udp"
+    ports    = ["53"]
   }
 
   source_tags = ["k8s"]

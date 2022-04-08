@@ -23,3 +23,32 @@ On the controller node:
 ### Join worker nodes to Cluster
 
 Using the token from above, execute this on each of the worker nodes.
+
+## Upgrading the Cluster
+
+### Control plane
+
+1. Drain the node: `kubectl drain k8s-controller --ignore-daemonsets`
+2. Upgrade kubeadm: `apt-get update && apt-get install -y --allow-change-held-packages kubeadm=<version>`
+3. Plan the control plane upgrade: `kubeadm upgrade plan <version>`
+4. Apply the kubeadm upgrade to the control plane: `kubeadm upgrade apply <version>`
+5. Upgrade kubelet: `apt-get update && apt-get install -y --allow-change-held-packages kubelet=<version>`
+6. Upgrade kubectl: `apt-get update && apt-get install -y --allow-change-held-packages kubectl=<version>`
+7. Reload the daemon: `systemctl daemon-reload`
+8. Restart kubelet: `systemctl restart kubelet`
+9. Uncordon the node: `kubectl uncordon k8s-controller`
+
+### Worker nodes
+
+From the control node, drain the worker node: `kubectl drain <worker_node> --ignore-daemonsets`
+
+Now go to the worker node:
+
+1. Upgrade kubeadm: `apt-get update && apt-get install -y --allow-change-held-packages kubeadm=<version>`
+2. Upgrade the node: `kubeadm upgrade node`
+3. Upgrade kubelet: `apt-get update && apt-get install -y --allow-change-held-packages kubelet=<version>`
+4. Upgrade kubectl: `apt-get update && apt-get install -y --allow-change-held-packages kubectl=<version>`
+5. Reload the daemon: `systemctl daemon-reload`
+6. Restart kubelet: `systemctl restart kubelet`
+
+Finally from the control node, uncordon the node `kubectl uncordon <worker_node>`

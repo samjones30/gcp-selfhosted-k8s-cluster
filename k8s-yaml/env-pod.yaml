@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: env-pod
+spec:
+  containers:
+  - name: busybox
+    image: busybox
+    command: ['sh', '-c', 'echo "configmap: $CONFIGMAPVAR secret: $SECRETVAR"']
+    env:
+    - name: CONFIGMAPVAR
+      valueFrom:
+        configMapKeyRef:
+          name: example-config-map
+          key: multiKey
+    - name: SECRETVAR
+      valueFrom:
+        secretKeyRef:
+          name: example-secret
+          key: secret1 
