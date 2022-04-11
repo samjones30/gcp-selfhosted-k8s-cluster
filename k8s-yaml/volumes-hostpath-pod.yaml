@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: volume-hostpath-pod
+spec:
+  restartPolicy: Never
+  containers:
+  - name: busybox
+    image: busybox
+    command:
+      - sh
+      - -c
+      - echo "Success!" > /output/success.txt
+    volumeMounts:
+    - name: volume-hostpath
+      mountPath: /output
+  volumes:
+  - name: volume-hostpath
+    hostPath:
+      path: /var/data/hostpath-volume
